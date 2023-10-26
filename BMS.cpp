@@ -38,6 +38,86 @@ void Bank_Account :: Display_Account()
 }
 int main()
 {
+    m:
+    char choice;
+    int num;
+    cout <<"\n\n";
+    cout <<"\t\t\t\t---------------------------------------------"<<endl;
+    cout <<"\t\t\t\t | Welcome to the Bank Management System |"<<endl;
+    cout <<"\t\t\t\t---------------------------------------------"<<endl;
+    cout <<endl;
+
+    cout <<"\t\t\t\t\t --- Main Menu ---"<<endl;
+    cout <<"\t\t\t\t\t 1. Create Account"<<endl;
+    cout <<"\t\t\t\t\t 2. Deposite Money"<<endl;
+    cout <<"\t\t\t\t\t 3. Withdraw Money"<<endl;
+    cout <<"\t\t\t\t\t 4. Balance Enquiry"<<endl;
+    cout <<"\t\t\t\t\t 5. All Account holders list"<<endl;
+    cout <<"\t\t\t\t\t 6. Close an Account"<<endl;
+    cout <<"\t\t\t\t\t 7. Modify an Account"<<endl;
+    cout <<"\t\t\t\t\t 8. Exit"<<endl;
+    cout <<endl;
+
+    cout <<"\t\t\t\t\t Enter Your Choice (1-8): ";
+    cin>>choice;
+
+    switch(choice)
+    {
+        case '1':
+        system("cls");
+            //creating an account
+        break;
+
+        case '2':
+        system("cls");
+        cout <<"\t\t\t\t\t Enter Your Account Number: ";
+        cin>>num;
+            //Deposite money Function
+        break;
+
+        case '3':
+        system("cls");
+        cout <<"\t\t\t\t\t Enter Your Account Number: ";
+        cin>>num;
+            //Withdraw Money Function
+        break;
+
+        case '4':
+        system("cls");
+        cout <<"\t\t\t\t\t Enter Your Account Number: ";
+        cin>>num;
+            //Balance Enquiry Function
+        break;
+
+        case '5':
+        system("cls");
+        // display_all();
+            //All Account Holders List Function
+        break;
+
+        case '6':
+        system("cls");
+        cout <<"\t\t\t\t\t Enter Your Account Number: ";
+        cin>>num;
+            //Close an Account Function
+        break;
+
+        case '7':
+        system("cls");
+        cout <<"\t\t\t\t\t Enter Your Account Number: ";
+        cin>>num;
+            // Modify an Account Function
+        break;
+
+        case '8':
+        cout <<"\t\t\t\t\tThanks for using Bank Management System"<<endl;
+        break;
+
+        default:
+        cout <<"\t\t\t\t\t You Have Entered Wrong Choise, Go back and Chose your right option!"<<endl;
+        goto m;
+    }
+
 Bank_Account B;
 B.Create_Account();
 cout << endl;

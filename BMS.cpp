@@ -10,9 +10,18 @@ class Bank_Account
     int Money_Deposite;
 
     public:
+
+    int returnAccountNumber() const
+    {
+        return Account_Number;
+    }
+
     void Create_Account();
+
     void Display_Account();
 };
+
+
 void Bank_Account :: Create_Account()
 {
     system("cls");
@@ -28,6 +37,7 @@ void Bank_Account :: Create_Account()
     cin >> Money_Deposite;
     cout << "\n\t\t\t\t\t\t\tAccount Created Successfully....:)";
 }
+
 void Bank_Account :: Display_Account()
 {
     cout << "\n\t\t\t\t\t****************User Information*********************\n";
@@ -36,11 +46,18 @@ void Bank_Account :: Display_Account()
     cout <<"\t\t\t\t\tType of account is: " << type << endl;
     cout <<"\t\t\t\t\tBalance amount is: " << Money_Deposite << endl;
 }
+
+void write_account();
+void delete_account(int);
+void display_details(int);
+
 int main()
 {
     m:
     char choice;
     int num;
+    do
+    {
     cout <<"\n\n";
     cout <<"\t\t\t\t---------------------------------------------"<<endl;
     cout <<"\t\t\t\t | Welcome to the Bank Management System |"<<endl;
@@ -60,11 +77,12 @@ int main()
 
     cout <<"\t\t\t\t\t Enter Your Choice (1-8): ";
     cin>>choice;
-
+    
     switch(choice)
     {
         case '1':
         system("cls");
+        write_account();
             //creating an account
         break;
 
@@ -86,7 +104,7 @@ int main()
         system("cls");
         cout <<"\t\t\t\t\t Enter Your Account Number: ";
         cin>>num;
-            //Balance Enquiry Function
+          display_details(num);  //Balance Enquiry Function
         break;
 
         case '5':
@@ -99,7 +117,7 @@ int main()
         system("cls");
         cout <<"\t\t\t\t\t Enter Your Account Number: ";
         cin>>num;
-            //Close an Account Function
+           delete_account(num); //Close an Account Function
         break;
 
         case '7':
@@ -117,12 +135,83 @@ int main()
         cout <<"\t\t\t\t\t You Have Entered Wrong Choise, Go back and Chose your right option!"<<endl;
         goto m;
     }
+    cin.ignore();
+    cin.get();
+    }while(choice != '8');
+    return 0;
 
-Bank_Account B;
-B.Create_Account();
-cout << endl;
-B.Display_Account();
-cout <<"\nt\t\t\t\t\t\t\t\t\tDONE!";
-cout <<"\n\n";
+// Bank_Account B;
+// B.Create_Account();
+// cout << endl;
+// B.Display_Account();
+cout <<"\nt\t\t\t\t\t\t\t\t\tDONE!\n\n";
 return 0;
+}
+
+void write_account()            // function to write record in binary form
+{
+    Bank_Account ac;
+    ofstream outFile;
+    outFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/account.dat", ios::binary | ios::app);
+    ac.Create_Account();
+    outFile.write(reinterpret_cast<char *> (&ac), sizeof(Bank_Account));
+    outFile.close();
+    ac.Display_Account();
+}
+
+void delete_account(int n)
+{
+    Bank_Account ac;
+    ifstream readFile;      // input file stream
+    ofstream writeFile;     // output file stream
+    readFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/account.dat", ios::binary);
+    if(!readFile)
+    {
+        cout <<"\t\t\t\t\tFile could not be open | Press any key...";
+        return;
+    }
+    writeFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/temp.dat", ios::binary | ios::app);
+    readFile.seekg(0, ios_base::beg);
+    while(readFile.read(reinterpret_cast<char*>(&ac), sizeof(Bank_Account)))
+    {
+        if(ac.returnAccountNumber() != n)
+        {
+            writeFile.write(reinterpret_cast<char *> (&ac), sizeof(Bank_Account));
+        }
+
+    }
+    writeFile.close();
+    readFile.close();
+    remove("Bank_Account.dat");
+    rename("temp.dat", "Bank_Account.dat");
+    cout << "\t\t\t\t\tRecord will be deleted..."<<endl;
+}
+
+
+void display_details(int num)
+{
+    Bank_Account ac;
+    ifstream readFile;
+    bool flage = false;
+    readFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/account.dat", ios::binary);
+    if(!readFile)
+    {
+        cout << "\t\t\t\t\tCould not find any account | Press any key...";
+        return;
+    }
+    readFile.seekg(0, ios_base::beg);
+    while(readFile.read(reinterpret_cast<char *> (&ac), sizeof(Bank_Account)))
+    {
+        if(ac.returnAccountNumber() == num)
+        {
+           ac.Display_Account();
+           flage = true;
+        }
+    }
+    readFile.close();
+   if(flage == false)
+   {
+    cout << "Account doesn't exist!"<<endl;
+   }
+    
 }

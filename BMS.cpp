@@ -2,6 +2,7 @@
 #include<iomanip>
 #include<fstream>
 using namespace std;
+
 class Bank_Account
 {
     int Account_Number;
@@ -11,73 +12,37 @@ class Bank_Account
 
     public:
 
-    int returnAccountNumber() const
+    int returnAccountNumber() const     // member function for returning account number
     {
         return Account_Number;
     }
-    void Report_Account() const;
-    void DEP(int x){
+
+    void Report_Account() const;        // it return all data member values
+
+    void DEP(int x){                    // to maintain Money when user deposite money
         Money_Deposite+=x;
     }
-    void WTHDRW(int x)
+
+    void WTHDRW(int x)                  // to maintain Money when user withdraw money from the account
     {
         Money_Deposite-=x;
     }
-    int Return_Deposite() const{
+
+    int Return_Deposite() const{        // to return user's balance in user's account
         return Money_Deposite;
     }
-    void Alter_Account();
-    void Create_Account();
 
-    void Display_Account();
+    void Modify();
+
+    void Create_Account();              // it is for Creating a New Account
+
+    void Display_Account();             // It is for Dispalying the all information of a defined account no. of a Bank holder
 };
-
-void Bank_Account :: Alter_Account()
-{
-    m:
-    int choice;
-    cout <<"\t\t\t\t\t---------------------------------"<<endl;
-    cout <<"\t\t\t\t\t|Modify Your Bank Account Details|"<<endl;
-    cout <<"\t\t\t\t\t---------------------------------"<<endl;
-    cout <<"\t\t\t\t\tPress 1 for change your Name" << endl;
-    cout <<"\t\t\t\t\tPress 2 for change your Account type" << endl;
-    cout <<"\t\t\t\t\tPress 3 for Deposite Money" << endl;
-    cout <<"\t\t\t\t\tPress 4 for exit" << endl;
-    cin>>choice;
-    switch(choice)
-    {
-        case 1:
-        cout <<"\t\t\t\t\tEnter your new Name: ";
-        cin.ignore();
-        cin.getline(name,50);
-        break;
-
-        case 2:
-        cout <<"\t\t\t\t\tEnter C for (current account), S for (saving account): ";
-        cin.ignore();
-        cin>>type;
-        break;
-
-        case 3:
-        int newMoney;
-        cout <<"\t\t\t\t\tEnter amount which you want to add in your account: ";
-        cin>>newMoney;
-        Money_Deposite+=newMoney;
-        break;
-
-        case 4:
-        cout << "\t\t\t\t\tThanks for using Bank Management system!"<<endl;
-        break;
-
-        default:
-        cout << "You have choosen wrong option Please go back and select a right option: ";
-        goto m;
-    }
-}
 
 void Bank_Account :: Create_Account()
 {
     system("cls");
+    system("color 17");
     cout << "\n\t\t\t\tEnter the account number: ";
     cin >> Account_Number;
     cout <<"\n\t\t\t\tEnter the name of the holder: ";
@@ -93,16 +58,35 @@ void Bank_Account :: Create_Account()
 
 void Bank_Account :: Display_Account()
 {
-    cout << "\n\t\t\t\t\t****************User Information*********************\n";
+    system("color 37");
+    cout << "\n\t\t\t\t\t****************User Information*********************\n"<<endl;
     cout <<"\t\t\t\t\tName of the Account Holder is: " << name << endl;
     cout <<"\t\t\t\t\tAccount number is: " << Account_Number << endl;
     cout <<"\t\t\t\t\tType of account is: " << type << endl;
     cout <<"\t\t\t\t\tBalance amount is: " << Money_Deposite << endl;
+    cout << "\n\t\t\t\t\t*****************************************************\n"<<endl;
+    cout <<endl<<endl;
 }
 
 void Bank_Account :: Report_Account() const
 {
+    system("color 40");
     cout <<"\t\t\t\t" <<Account_Number << setw(18) <<name << setw(6) << type << setw(17) << Money_Deposite <<endl;
+}
+
+void Bank_Account :: Modify()
+{
+    system("cls");
+    system("color 17");
+    cout << "\t\t\t\t\t Bank account number is: " << Account_Number <<endl;
+    cout <<"\t\t\t\t\t Modify bank account holder name: ";
+    cin.ignore();
+    cin.getline(name, 50);
+    cout <<"\t\t\t\t\t Modify the type of account: ";
+    cin>>type;
+    type = toupper(type);
+    cout <<"\t\t\t\t\t Modify bank account Amount: ";
+    cin>>Money_Deposite;
 }
 
 void write_account();
@@ -110,9 +94,11 @@ void delete_account(int);
 void display_details(int);
 void display_all();
 void money_deposite_withdraw(int,int);
+void update_bank_account(int);
 
 int main()
 {
+    system("color 60");
     m:
     char choice;
     int num;
@@ -182,7 +168,7 @@ int main()
         system("cls");
         cout <<"\t\t\t\t\t Enter Your Account Number: ";
         cin>>num;
-        //    modify_account(num);              // Modify an Account Function
+           update_bank_account(num);              // Modify an Account Function
         break;
 
         case '8':
@@ -190,27 +176,24 @@ int main()
         break;
 
         default:
-        cout <<"\t\t\t\t\t You Have Entered Wrong Choise, Go back and Chose your right option!"<<endl;
+        cout <<endl;
+        cout <<"\t\t\t\t\t Wrong choice, Go back and Chose your right option!"<<endl;
         goto m;
     }
     cin.ignore();
     cin.get();
     }while(choice != '8');
     return 0;
-
-// Bank_Account B;
-// B.Create_Account();
-// cout << endl;
-// B.Display_Account();
 cout <<"\n\t\t\t\t\t\t\t\t\t\tDONE!\n\n";
 return 0;
 }
 
 void write_account()            // function to write record in binary form
 {
+    system("color 30");
     Bank_Account ac;
     ofstream outFile;
-    outFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/account.dat", ios::binary | ios::app);
+    outFile.open("account.dat", ios::binary | ios::app);
     ac.Create_Account();
     outFile.write(reinterpret_cast<char *> (&ac), sizeof(Bank_Account));
     outFile.close();
@@ -219,16 +202,17 @@ void write_account()            // function to write record in binary form
 
 void delete_account(int n)
 {
+    system("color 40");
     Bank_Account ac;
     ifstream readFile;      // input file stream
     ofstream writeFile;     // output file stream
-    readFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/account.dat", ios::binary);
+    readFile.open("account.dat", ios::binary);
     if(!readFile)
     {
         cout <<"\t\t\t\t\tFile could not be open | Press any key...";
         return;
     }
-    writeFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/temp.dat", ios::binary);
+    writeFile.open("temp.dat", ios::binary);
     readFile.seekg(0, ios::beg);
     while(readFile.read(reinterpret_cast<char* > (&ac), sizeof(Bank_Account)))
     {
@@ -249,10 +233,11 @@ void delete_account(int n)
 
 void display_details(int num)
 {
+    system("color 90");
     Bank_Account ac;
     ifstream readFile;
     bool flage = false;
-    readFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/account.dat", ios::binary);
+    readFile.open("account.dat", ios::binary);
     if(!readFile)
     {
         cout << "\t\t\t\t\tCould not find any account | Press any key...";
@@ -277,9 +262,10 @@ void display_details(int num)
 void display_all()
 {
     system("cls");
+    system("color 50");
     Bank_Account ac;
     ifstream readFile;
-    readFile.open("C:/Users/Babloo/Desktop/Practice/C++/BankManagementSystem/account.dat", ios::binary);
+    readFile.open("account.dat", ios::binary);
     if(!readFile)
     {
         cout << "\t\t\t\t\t File couldn't be open | Press any key..."<<endl;
@@ -299,6 +285,7 @@ void display_all()
 
 void money_deposite_withdraw(int n, int option)
 {
+    system("color 70");
     int amount;
     bool found = false;
     fstream File;
@@ -339,5 +326,39 @@ void money_deposite_withdraw(int n, int option)
     if(found == false)
     {
         cout <<"\t\t\t\t\t Record not found! "<<endl;
+    }
+}
+
+void update_bank_account(int n)
+{
+    system("color 20");
+    bool found = false;
+    Bank_Account ac;
+    fstream File;
+    File.open("account.dat", ios::binary | ios::in | ios::out);     // Open the file in binary mode
+    if(!File)
+    {
+        cout << "\t\t\t\t\t\t Account could not be exist: "<<endl;
+        return;
+    }
+    while(!File.eof() && found == false)
+    {
+        File.read(reinterpret_cast<char *> (&ac), sizeof(Bank_Account));            // read the record from the file
+        if(ac.returnAccountNumber() == n)
+        {
+            ac.Display_Account();
+            cout << "\t\t\t\t\t Enter the new details of your account:"<<endl;
+            ac.Modify();
+            int pos = (-1)* static_cast<int>(sizeof(Bank_Account));      
+            File.seekp(pos, ios::cur);                                             // move the pointer to the position of the file
+            File.write(reinterpret_cast<char *> (&ac), sizeof(Bank_Account));
+            cout <<"\t\t\t\t\t Record Updated!"<<endl;
+            found = true;
+        }
+    }
+    File.close();
+    if(found == false)
+    {
+        cout << "\t\t\t\t\t Record not found!"<<endl;
     }
 }

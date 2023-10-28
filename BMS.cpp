@@ -16,7 +16,16 @@ class Bank_Account
         return Account_Number;
     }
     void Report_Account() const;
-    void Withdraw_Money();
+    void DEP(int x){
+        Money_Deposite+=x;
+    }
+    void WTHDRW(int x)
+    {
+        Money_Deposite-=x;
+    }
+    int Return_Deposite() const{
+        return Money_Deposite;
+    }
     void Alter_Account();
     void Create_Account();
 
@@ -100,7 +109,7 @@ void write_account();
 void delete_account(int);
 void display_details(int);
 void display_all();
-void money_withdraw(int);
+void money_deposite_withdraw(int,int);
 
 int main()
 {
@@ -117,8 +126,8 @@ int main()
 
     cout <<"\t\t\t\t\t --- Main Menu ---"<<endl;
     cout <<"\t\t\t\t\t 1. Create Account"<<endl;            // created
-    cout <<"\t\t\t\t\t 2. Deposite Money"<<endl;
-    cout <<"\t\t\t\t\t 3. Withdraw Money"<<endl;            
+    cout <<"\t\t\t\t\t 2. Deposite Money"<<endl;            // created
+    cout <<"\t\t\t\t\t 3. Withdraw Money"<<endl;            // created
     cout <<"\t\t\t\t\t 4. Balance Enquiry"<<endl;           // created
     cout <<"\t\t\t\t\t 5. All Account holders list"<<endl;  // created
     cout <<"\t\t\t\t\t 6. Close an Account"<<endl;          // created
@@ -288,3 +297,47 @@ void display_all()
     cout <<"\t\t\t\t===================================================="<<endl;
 }
 
+void money_deposite_withdraw(int n, int option)
+{
+    int amount;
+    bool found = false;
+    fstream File;
+    Bank_Account ac;
+    File.open("account.dat", ios::binary | ios::in | ios::out);
+    while(!File.eof() && found == false)
+    {
+        File.read(reinterpret_cast<char *> (&ac), sizeof(Bank_Account));
+        if(ac.returnAccountNumber() == n)
+        {
+            ac.Display_Account();
+            if(option == 1)
+            {
+                cout <<"\t\t\t\t\t Enter amount to be deposite into your Bank account: ";
+                cin>>amount;
+                ac.DEP(amount);
+            }
+            if(option == 2){
+                cout << "\t\t\t\t\t Enter amount to be withdrawing from your Bank account: ";
+                cin>>amount;
+                int balance = ac.Return_Deposite() - amount;
+                if(balance < 0)
+                {
+                    cout <<"\t\t\t\t\t Your account have unsufficient money"<<endl;
+
+                }else{
+                    ac.WTHDRW(amount);
+                }
+            }
+            int pos = (-1)* static_cast<int>(sizeof(Bank_Account));
+            File.seekp(pos, ios::cur);
+            File.write(reinterpret_cast<char *> (&ac), sizeof(Bank_Account));
+            cout <<"\t\t\t\t\t Record Updated!"<<endl;
+            found = true;
+        }
+    }
+    File.close();
+    if(found == false)
+    {
+        cout <<"\t\t\t\t\t Record not found! "<<endl;
+    }
+}
